@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"name": "ledControllerTHIS",
+			"path": "."
+		},
+		{
+			"name": "serial:/COM5",
+			"uri": "serial://com5/"
+		}
+	]
+}
