@@ -144,7 +144,7 @@ def send_slider_data():
         send_request(url, data)
 
 # Inizializzazione WiFi
-connect_wifi('Lab', 'itsnotabugitsafeature')
+connect_wifi('XXX', 'XXX')
 
 # Configurazione dei pulsanti
 buttons_config = [
