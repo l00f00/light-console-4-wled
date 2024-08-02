@@ -1,28 +1,17 @@
-<<<<<<< HEAD
-# light-console-4-wled
-custom light console for wled setup
-=======
 # LabZero Light Control System
 
-This project is for a custom peripheral based on ESP32 and MicroPython, designed to control the lights in our lab, LabZero (labzero.org). The system includes buttons, sliders, and network capabilities to manage and synchronize lighting states across various devices.
+Questo progetto è un sistema di controllo luci basato su ESP32 e MicroPython, progettato per gestire l'illuminazione nel nostro laboratorio, LabZero (labzero.org). Il sistema include pulsanti, slider e funzionalità di rete per gestire e sincronizzare gli stati di illuminazione tra vari dispositivi.
 
-## Installation
+## Installazione
 
-### Clone the Repository
+### Clona il Repository
 
-````bash
 git clone https://github.com/labzero/labzero-light-control.git
 
-Install Dependencies using Thonny
-Alternatively, you can install the libraries using Thonny:
+### Installa le Dipendenze di Micropython
+per il Sistema di Controllo Luci LabZero
+Queste librerie sono per MicroPython e dovrebbero essere installate usando mip o Thonny
 
-Open Thonny IDE.
-Go to Tools -> Manage Packages.
-Search for each package (e.g., micropython-ujson) and install it.
-Make sure your ESP32 is connected to your computer and Thonny is configured to use MicroPython (ESP32).
-I use Pymark extension for Vs Code ([Pymark](https://marketplace.visualstudio.com/items?itemName=pycom.Pymakr))
-
-Libs:
 micropython-ujson
 micropython-machine
 micropython-network
@@ -30,40 +19,9 @@ micropython-requests
 micropython-urequests
 micropython-socket
 
+#### Utilizzando mip
+Per installare le librerie richieste utilizzando mip, esegui i seguenti comandi nel tuo ambiente MicroPython:
 
-
-Certamente! Ecco tutto il contenuto del README.md in inglese:
-
-markdown
-Copy code
-# LabZero Light Control System
-
-This project is for a custom peripheral based on ESP32 and MicroPython, designed to control the lights in our lab, LabZero (labzero.org). The system includes buttons, sliders, and network capabilities to manage and synchronize lighting states across various devices.
-
-## Installation
-
-### Clone the Repository
-```bash
-git clone https://github.com/labzero/labzero-light-control.git
-Install Dependencies
-Create a requirements.txt file with the following content:
-
-plaintext
-Copy code
-# requirements.txt for LabZero Light Control System
-# These libraries are for MicroPython and should be installed using mip or Thonny
-
-micropython-ujson
-micropython-machine
-micropython-network
-micropython-requests
-micropython-urequests
-micropython-socket
-Install Dependencies using mip
-To install the required libraries using mip, run the following commands in your MicroPython environment:
-
-python
-Copy code
 import mip
 
 mip.install('micropython-ujson')
@@ -72,20 +30,22 @@ mip.install('micropython-network')
 mip.install('micropython-requests')
 mip.install('micropython-urequests')
 mip.install('micropython-socket')
-Install Dependencies using Thonny
-Alternatively, you can install the libraries using Thonny:
 
-Open Thonny IDE.
-Go to Tools -> Manage Packages.
-Search for each package (e.g., micropython-ujson) and install it.
-Make sure your ESP32 is connected to your computer and Thonny is configured to use MicroPython (ESP32).
+#### Utilizzando Thonny
+In alternativa, puoi installare le librerie usando Thonny:
 
-Configuration
-WiFi Setup
-Configure your WiFi settings in the connect_wifi function:
+1. Apri Thonny IDE.
+2. Vai su Strumenti -> Gestisci pacchetti.
+3. Cerca ogni pacchetto (ad esempio, micropython-ujson) e installalo.
+4. Assicurati che il tuo ESP32 sia collegato al computer e che Thonny sia configurato per utilizzare MicroPython (ESP32).
 
-python
-Copy code
+## Configurazione
+
+### Configurazione WiFi
+Configura le impostazioni WiFi nella funzione `connect_wifi`:
+
+import network
+
 def connect_wifi(ssid, password):
     wlan = network.WLAN(network.STA_IF)
     wlan.active(True)
@@ -98,11 +58,10 @@ def connect_wifi(ssid, password):
     print('Network configuration:', wlan.ifconfig())
 
 connect_wifi('XXX', 'passWORD')
-Buttons Configuration
-Define the buttons and their corresponding pins in the buttons_config list:
 
-python
-Copy code
+### Configurazione Pulsanti
+Definisci i pulsanti e i relativi pin nella lista `buttons_config`:
+
 buttons_config = [
     {
         "input_pin": 12,
@@ -116,15 +75,14 @@ buttons_config = [
         "state_name": "COLONNE_STATE",
         "ip_addresses": ["http://192.168.1.108/json/state"]
     },
-    // Add more button configurations as needed
+    # Aggiungi altre configurazioni di pulsanti se necessario
 ]
 
 buttons = [Button(**config) for config in buttons_config]
-Sliders Configuration
-Define the sliders and their corresponding pins in the sliders_config list:
 
-python
-Copy code
+### Configurazione Slider
+Definisci gli slider e i relativi pin nella lista `sliders_config`:
+
 sliders_config = [
     {"pin": 39, "name": "slider_R"},
     {"pin": 34, "name": "slider_G"},
@@ -132,44 +90,48 @@ sliders_config = [
 ]
 
 sliders = [Slider(**config) for config in sliders_config]
-Usage
-Running the System
-To start the light control system, call the main function:
 
-python
-Copy code
+## Utilizzo
+
+### Avvio del Sistema
+Per avviare il sistema di controllo luci, chiama la funzione `main`:
+
 print("Initialize Consolle")
 main()
-Button Handling
-Buttons are initialized with input and output pins and an optional state name. When pressed, they toggle their state and send requests to configured IP addresses if applicable.
 
-Slider Handling
-Sliders read analog input values and update the global state with the RGB values, which are then sent to the configured IP addresses.
+### Gestione Pulsanti
+I pulsanti sono inizializzati con pin di input e output e un nome di stato opzionale. Quando premuti, cambiano il loro stato e inviano richieste agli indirizzi IP configurati, se applicabile.
 
-Preset Management
-Save Preset: Saves the current lighting configuration to a new preset slot.
-Next/Previous Preset: Navigates through the saved presets.
-Roof Panel Control
-Special buttons are configured to control roof panels, toggling their state and sending requests to specified IP addresses.
+### Gestione Slider
+Gli slider leggono i valori di input analogici e aggiornano lo stato globale con i valori RGB, che vengono poi inviati agli indirizzi IP configurati.
 
-Global State
-The system maintains a global state to track button presses, slider values, and selected IP addresses. This state is used to synchronize lighting configurations across multiple devices.
+### Gestione Preset
+- Salva Preset: Salva la configurazione di illuminazione corrente in uno slot preset.
+- Prossimo/Precedente Preset: Naviga tra i preset salvati.
 
-Functions
-send_request(url, data): Sends an HTTP POST request with the provided data.
-Button: Class to manage button inputs and their states.
-Slider: Class to manage slider inputs and their values.
-connect_wifi(ssid, password): Connects the ESP32 to the specified WiFi network.
-read_sliders(): Reads the current values from all sliders.
-send_slider_data(): Sends the current slider values to the selected IP addresses.
-save_preset(): Saves the current configuration as a new preset.
-next_preset(): Switches to the next preset.
-prev_preset(): Switches to the previous preset.
-toggle_tetto(): Toggles the state of the roof panels.
-Contributing
-Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+### Controllo del Pannello del Tetto
+Pulsanti speciali sono configurati per controllare i pannelli del tetto, cambiando il loro stato e inviando richieste agli indirizzi IP specificati.
 
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
-````
->>>>>>> master
+### Stato Globale
+Il sistema mantiene uno stato globale per tracciare le pressioni dei pulsanti, i valori degli slider e gli indirizzi IP selezionati. Questo stato è utilizzato per sincronizzare le configurazioni di illuminazione su più dispositivi.
+
+## Funzioni
+
+- send_request(url, data): Invia una richiesta HTTP POST con i dati forniti.
+- Button: Classe per gestire gli input dei pulsanti e i loro stati.
+- Slider: Classe per gestire gli input degli slider e i loro valori.
+- connect_wifi(ssid, password): Connette l'ESP32 alla rete WiFi specificata.
+- read_sliders(): Legge i valori correnti da tutti gli slider.
+- send_slider_data(): Invia i valori correnti degli slider agli indirizzi IP selezionati.
+- save_preset(): Salva la configurazione corrente come un nuovo preset.
+- next_preset(): Passa al preset successivo.
+- prev_preset(): Passa al preset precedente.
+- toggle_tetto(): Cambia lo stato dei pannelli del tetto.
+
+## Contributi
+
+I contributi sono benvenuti! Si prega di fare un fork del repository e inviare una pull request con le proprie modifiche.
+
+## Licenza
+
+Questo progetto è concesso in licenza sotto la licenza MIT. Vedi il file LICENSE per i dettagli.
